@@ -1,7 +1,8 @@
-import { Image, StyleSheet } from "react-native";
+import { Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Text, View } from "@/src/components/Themed";
 import Colors from "@/src/constants/Colors";
 import { Product } from "../types";
+import { Link } from "expo-router";
 
 const defaulPizzaImage =
   "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png";
@@ -11,17 +12,20 @@ type ProductListItemProps = {
 };
 
 const ProductListItem = ({ product }: ProductListItemProps) => {
+  const destination = `/${product.id}`;
   return (
-    <View style={styles.container}>
-      <Image
-        source={{ uri: product.image || defaulPizzaImage }}
-        style={styles.image}
-        resizeMode="contain"
-      />
+    <Link href={destination as any} asChild>
+      <TouchableOpacity style={styles.container}>
+        <Image
+          source={{ uri: product.image || defaulPizzaImage }}
+          style={styles.image}
+          resizeMode="contain"
+        />
 
-      <Text style={styles.title}>{product.name}</Text>
-      <Text style={styles.price}>${product.price}</Text>
-    </View>
+        <Text style={styles.title}>{product.name}</Text>
+        <Text style={styles.price}>${product.price}</Text>
+      </TouchableOpacity>
+    </Link>
   );
 };
 export default ProductListItem;
