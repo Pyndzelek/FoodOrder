@@ -1,5 +1,5 @@
 import { Image, StyleSheet, TouchableOpacity } from "react-native";
-import { Text, View } from "@/src/components/Themed";
+import { Text } from "@/src/components/Themed";
 import Colors from "@/src/constants/Colors";
 import { Product } from "../types";
 import { Link } from "expo-router";
