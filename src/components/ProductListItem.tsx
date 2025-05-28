@@ -12,7 +12,7 @@ type ProductListItemProps = {
 };
 
 const ProductListItem = ({ product }: ProductListItemProps) => {
-  const destination = `/${product.id}`;
+  const destination = `/menu/${product.id}`;
   return (
     <Link href={destination as any} asChild>
       <TouchableOpacity style={styles.container}>
