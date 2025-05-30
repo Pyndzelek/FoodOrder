@@ -5,11 +5,13 @@ import { CartItem, Product } from "../types";
 type CartType = {
   items: CartItem[];
   onAddItem: (product: Product, size: CartItem["size"]) => void;
+  updateQuantity: (id: string, delta: number) => void;
 };
 
 export const CartContext = createContext<CartType>({
   items: [],
   onAddItem: () => {},
+  updateQuantity: (id: string, delta: number) => {},
 });
 
 interface CartProviderProps {
@@ -30,8 +32,10 @@ const CartProvider = ({ children }: CartProviderProps) => {
     setItems([newCartItem, ...items]);
   };
 
+  const updateQuantity = (id: string, delta: number) => {};
+
   return (
-    <CartContext.Provider value={{ items, onAddItem }}>
+    <CartContext.Provider value={{ items, onAddItem, updateQuantity }}>
       {children}
     </CartContext.Provider>
   );
