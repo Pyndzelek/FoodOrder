@@ -4,16 +4,17 @@ import { StatusBar } from "expo-status-bar";
 
 import { useCart } from "@/src/providers/CartProvider";
 import CartListItem from "../components/CartListItem";
+import Button from "../components/Button";
 
 const CartScreen = () => {
-  const { items } = useCart();
+  const { items, total } = useCart();
 
   return (
-    <View>
+    <View style={{ padding: 10, backgroundColor: "white" }}>
       <FlatList
         data={items}
         renderItem={({ item }) => <CartListItem cartItem={item} />}
-        contentContainerStyle={{ padding: 10, gap: 10 }}
+        contentContainerStyle={{ gap: 10 }}
       />
 
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
