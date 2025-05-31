@@ -2,7 +2,7 @@ import { Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Text } from "@/src/components/Themed";
 import Colors from "@/src/constants/Colors";
 import { Product } from "../types";
-import { Link } from "expo-router";
+import { Link, useSegments } from "expo-router";
 
 const defaulPizzaImage =
   "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png";
@@ -12,7 +12,9 @@ type ProductListItemProps = {
 };
 
 const ProductListItem = ({ product }: ProductListItemProps) => {
-  const destination = `/menu/${product.id}`;
+  const segments = useSegments();
+  const destination = `/${segments[0]}/menu/${product.id}`;
+
   return (
     <Link href={destination as any} asChild>
       <TouchableOpacity style={styles.container}>

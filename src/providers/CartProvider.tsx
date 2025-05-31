@@ -56,9 +56,10 @@ const CartProvider = ({ children }: CartProviderProps) => {
     );
   };
 
-  const total = items.reduce(
-    (sum, item) => (sum += item.product.price * item.quantity),
-    0
+  const total = parseFloat(
+    items
+      .reduce((sum, item) => (sum += item.product.price * item.quantity), 0)
+      .toFixed(2)
   );
 
   return (

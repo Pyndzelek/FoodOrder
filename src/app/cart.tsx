@@ -10,7 +10,7 @@ const CartScreen = () => {
   const { items, total } = useCart();
 
   return (
-    <View style={{ padding: 10, backgroundColor: "white" }}>
+    <View style={{ padding: 10 }}>
       <FlatList
         data={items}
         renderItem={({ item }) => <CartListItem cartItem={item} />}
