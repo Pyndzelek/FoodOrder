@@ -7,24 +7,51 @@ import Colors from "@/src/constants/Colors";
 const MenuStack = () => {
   return (
     <Stack
-      screenOptions={{
-        headerRight: () => (
-          <Link href="/cart" asChild>
-            <Pressable>
-              {({ pressed }) => (
-                <FontAwesome
-                  name="shopping-cart"
-                  size={25}
-                  color={Colors.light.tint}
-                  style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                />
-              )}
-            </Pressable>
-          </Link>
-        ), // Hide the header right button
-      }}
+      screenOptions={
+        {
+          // Hide the header right button
+        }
+      }
     >
-      <Stack.Screen name="index" options={{ title: "Menu" }}></Stack.Screen>
+      <Stack.Screen
+        name="index"
+        options={{
+          headerRight: () => (
+            <Link href="/" asChild>
+              <Pressable>
+                {({ pressed }) => (
+                  <FontAwesome
+                    name="plus-circle"
+                    size={25}
+                    color={Colors.light.tint}
+                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                  />
+                )}
+              </Pressable>
+            </Link>
+          ),
+          title: "Menu",
+        }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="[id]"
+        options={{
+          headerRight: () => (
+            <Link href="/" asChild>
+              <Pressable>
+                {({ pressed }) => (
+                  <FontAwesome
+                    name="pencil"
+                    size={25}
+                    color={Colors.light.tint}
+                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                  />
+                )}
+              </Pressable>
+            </Link>
+          ),
+        }}
+      ></Stack.Screen>
     </Stack>
   );
 };
