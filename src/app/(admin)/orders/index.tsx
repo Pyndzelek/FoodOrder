@@ -1,6 +1,6 @@
-import { Text, FlatList } from 'react-native';
-import orders from '@assets/data/orders';
-import OrderListItem from '@/components/OrderListItem';
+import { Text, FlatList } from "react-native";
+import orders from "@/assets/data/orders";
+import OrderListItem from "@/src/components/OrderListItem";
 
 export default function OrdersScreen() {
   return (
