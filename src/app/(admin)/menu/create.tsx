@@ -2,6 +2,8 @@ import { View, Text, StyleSheet, TextInput, Image } from "react-native";
 import React, { useState } from "react";
 import Button from "@/src/components/Button";
 import Colors from "@/src/constants/Colors";
+import * as ImagePicker from "expo-image-picker";
+import { Stack } from "expo-router";
 
 const defaultPizzaImage =
   "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png";
@@ -10,6 +12,21 @@ const CreateScreen = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [erors, setErrors] = useState("");
+  const [image, setImage] = useState<string | null>(null);
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
 
   const validateInput = () => {
     if (!name.trim()) {
@@ -37,8 +54,21 @@ const CreateScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Image style={styles.image} source={{ uri: defaultPizzaImage }} />
-      <Text style={styles.imageText}>Select image</Text>
+      <Stack.Screen
+        options={{
+          title: "Create Product",
+          headerStyle: { backgroundColor: Colors.light.tint },
+          headerTintColor: "#fff",
+          headerTitleStyle: { fontWeight: "bold" },
+        }}
+      />
+      <Image
+        style={styles.image}
+        source={{ uri: image || defaultPizzaImage }}
+      />
+      <Text onPress={pickImage} style={styles.imageText}>
+        Select image
+      </Text>
 
       <Text style={styles.label}>create</Text>
       <TextInput
