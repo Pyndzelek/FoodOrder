@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, Image } from "react-native";
+import { View, Text, StyleSheet, TextInput, Image, Alert } from "react-native";
 import React, { useState } from "react";
 import Button from "@/src/components/Button";
 import Colors from "@/src/constants/Colors";
@@ -16,18 +16,6 @@ const CreateScreen = () => {
   const [price, setPrice] = useState("");
   const [erors, setErrors] = useState("");
   const [image, setImage] = useState<string | null>(null);
-
-  if (isUpdating) {
-    // Fetch product details by productID and set initial state
-    const product = products.find((item) => item.id === Number(id));
-    if (product) {
-      setName(product.name);
-      setPrice(product.price.toString());
-      setImage(product.image || defaultPizzaImage);
-    } else {
-      return <Text>Product not found</Text>;
-    }
-  }
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -78,6 +66,36 @@ const CreateScreen = () => {
     setPrice("");
   };
 
+  const onDelete = () => {
+    // Handle the deletion logic here
+    console.log("Deleting product with id:", id);
+    // Reset fields after deletion
+    setName("");
+    setPrice("");
+    setImage(null);
+  };
+
+  const confirmDelete = () => {
+    // Implement confirmation logic here
+    console.log("Confirm delete action");
+    Alert.alert(
+      "Delete Product",
+      "Are you sure you want to delete this product?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          onPress: onDelete,
+          style: "destructive",
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
   const onSubmit = () => {
     if (isUpdating) {
       onUpdate();
@@ -125,6 +143,11 @@ const CreateScreen = () => {
       <Text style={{ color: "red" }}>{erors}</Text>
 
       <Button text={isUpdating ? "update" : "create"} onPress={onSubmit} />
+      {isUpdating && (
+        <Text onPress={confirmDelete} style={styles.imageText}>
+          Delete
+        </Text>
+      )}
     </View>
   );
 };
