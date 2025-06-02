@@ -6,7 +6,7 @@ const AuthStack = () => {
   return (
     <Stack>
       <Stack.Screen
-        name="index"
+        name="sign-in"
         options={{
           headerShown: false, // Hide the header for the sign-in screen
           title: "Sign in",

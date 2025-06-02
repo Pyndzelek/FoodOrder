@@ -9,9 +9,6 @@ const OrdersStack = () => {
         name="index"
         options={{
           title: "Orders",
-          headerTitleAlign: "center",
-          headerStyle: { backgroundColor: "#f8f8f8" },
-          headerTitleStyle: { color: "#333" },
         }}
       />
     </Stack>
