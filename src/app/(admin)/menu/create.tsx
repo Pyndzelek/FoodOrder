@@ -3,16 +3,31 @@ import React, { useState } from "react";
 import Button from "@/src/components/Button";
 import Colors from "@/src/constants/Colors";
 import * as ImagePicker from "expo-image-picker";
-import { Stack } from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
+import products from "@/assets/data/products";
 
 const defaultPizzaImage =
   "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png";
 
 const CreateScreen = () => {
+  const { id } = useLocalSearchParams();
+  const isUpdating = !!id;
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [erors, setErrors] = useState("");
   const [image, setImage] = useState<string | null>(null);
+
+  if (isUpdating) {
+    // Fetch product details by productID and set initial state
+    const product = products.find((item) => item.id === Number(id));
+    if (product) {
+      setName(product.name);
+      setPrice(product.price.toString());
+      setImage(product.image || defaultPizzaImage);
+    } else {
+      return <Text>Product not found</Text>;
+    }
+  }
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -52,11 +67,30 @@ const CreateScreen = () => {
     setPrice("");
   };
 
+  const onUpdate = () => {
+    if (!validateInput()) {
+      return;
+    }
+    // Handle the update logic here
+    console.log("Updating product:", { id, name, price, image });
+    // Reset fields after update
+    setName("");
+    setPrice("");
+  };
+
+  const onSubmit = () => {
+    if (isUpdating) {
+      onUpdate();
+    } else {
+      onCreate();
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Stack.Screen
         options={{
-          title: "Create Product",
+          title: isUpdating ? "Update product" : "Create Product",
           headerStyle: { backgroundColor: Colors.light.tint },
           headerTintColor: "#fff",
           headerTitleStyle: { fontWeight: "bold" },
@@ -90,7 +124,7 @@ const CreateScreen = () => {
 
       <Text style={{ color: "red" }}>{erors}</Text>
 
-      <Button text="create" onPress={onCreate} />
+      <Button text={isUpdating ? "update" : "create"} onPress={onSubmit} />
     </View>
   );
 };
