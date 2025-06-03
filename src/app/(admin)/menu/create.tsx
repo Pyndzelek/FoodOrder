@@ -1,26 +1,43 @@
 import { View, Text, StyleSheet, TextInput, Image, Alert } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@/src/components/Button";
 import Colors from "@/src/constants/Colors";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { useCreateProduct } from "@/src/api/products";
+import {
+  useCreateProduct,
+  useProduct,
+  useUpdateProduct,
+} from "@/src/api/products";
 
 const defaultPizzaImage =
   "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png";
 
 const CreateScreen = () => {
-  const { id } = useLocalSearchParams();
+  const { id: idString } = useLocalSearchParams();
+  const id = parseInt(typeof idString === "string" ? idString : idString?.[0]);
   const isUpdating = !!id;
+
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [erors, setErrors] = useState("");
   const [image, setImage] = useState<string | null>(null);
+
   const router = useRouter();
+
   const { mutate: createProduct } = useCreateProduct();
+  const { mutate: updateProduct } = useUpdateProduct();
+  const { data: product } = useProduct(id);
+
+  useEffect(() => {
+    if (product) {
+      setName(product?.name || "");
+      setPrice(product?.price.toString() || "");
+      setImage(product?.image || null);
+    }
+  }, [product]);
 
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
       allowsEditing: true,
@@ -67,11 +84,21 @@ const CreateScreen = () => {
     if (!validateInput()) {
       return;
     }
+    console.log("Updating product with id:", id);
     // Handle the update logic here
-    console.log("Updating product:", { id, name, price, image });
-    // Reset fields after update
-    setName("");
-    setPrice("");
+    updateProduct(
+      {
+        id,
+        name,
+        price: parseFloat(price),
+        image,
+      },
+      {
+        onSuccess: () => {
+          router.back();
+        },
+      }
+    );
   };
 
   const onDelete = () => {

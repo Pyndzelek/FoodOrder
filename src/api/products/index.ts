@@ -64,3 +64,36 @@ export const useCreateProduct = () => {
     },
   });
 };
+
+export const useUpdateProduct = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: any) => {
+      const { data: updatedProduct, error } = await supabase
+        .from("products")
+        .update({
+          name: data.name,
+          price: data.price,
+          image: data.image,
+        })
+        .eq("id", data.id)
+        .single();
+      if (error) {
+        throw error;
+      }
+      return updatedProduct;
+    },
+    onSuccess: async (_, { id }) => {
+      await queryClient.invalidateQueries({
+        queryKey: ["products"],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ["products", id],
+      });
+    },
+    onError: (error) => {
+      console.error("Error updating product:", error);
+    },
+  });
+};
