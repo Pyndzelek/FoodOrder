@@ -6,6 +6,7 @@ import * as ImagePicker from "expo-image-picker";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import {
   useCreateProduct,
+  useDeleteProduct,
   useProduct,
   useUpdateProduct,
 } from "@/src/api/products";
@@ -27,6 +28,7 @@ const CreateScreen = () => {
 
   const { mutate: createProduct } = useCreateProduct();
   const { mutate: updateProduct } = useUpdateProduct();
+  const { mutate: deleteProduct } = useDeleteProduct();
   const { data: product } = useProduct(id);
 
   useEffect(() => {
@@ -102,12 +104,12 @@ const CreateScreen = () => {
   };
 
   const onDelete = () => {
-    // Handle the deletion logic here
     console.log("Deleting product with id:", id);
-    // Reset fields after deletion
-    setName("");
-    setPrice("");
-    setImage(null);
+    deleteProduct(id, {
+      onSuccess: () => {
+        router.push("/(admin)/menu");
+      },
+    });
   };
 
   const confirmDelete = () => {
