@@ -9,6 +9,9 @@ const SignUp = () => {
   const [password, setPassword] = React.useState("");
 
   // Handle sign-in logic here, e.g., API call to authenticate user
+  async function handleSignUp() {
+    // Example: Call your authentication API here
+  }
 
   return (
     <View style={styles.cotnainer}>
@@ -49,12 +52,7 @@ const SignUp = () => {
         onChangeText={setPassword}
       />
       <View style={{ marginTop: 30 }}>
-        <Button
-          text="Sign Up"
-          onPress={() => {
-            // Handle sign-up logic here
-          }}
-        />
+        <Button text="Sign Up" onPress={SignUp} />
       </View>
     </View>
   );
