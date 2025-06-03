@@ -1,8 +1,21 @@
-import products from "@/assets/data/products";
 import ProductListItem from "@/src/components/ProductListItem";
-import { FlatList, View } from "react-native";
+import { supabase } from "@/src/lib/supabase";
+import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import { useQuery } from "@tanstack/react-query";
+import { useProductList } from "@/src/api/products";
 
 export default function MenuScreen() {
+  const { data: products, isLoading, error } = useProductList();
+  if (isLoading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
+  if (error) {
+    return (
+      <View style={{ padding: 20 }}>
+        <Text>Error loading products: {error.message}</Text>
+      </View>
+    );
+  }
   return (
     <FlatList
       data={products}
