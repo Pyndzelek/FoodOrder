@@ -1,12 +1,28 @@
-import { View, Text, StyleSheet, TextInput } from "react-native";
-import React from "react";
+import { View, Text, StyleSheet, TextInput, Alert } from "react-native";
+import React, { useState } from "react";
 import Colors from "@/src/constants/Colors";
 import Button from "@/src/components/Button";
 import { Link } from "expo-router";
+import { supabase } from "@/src/lib/supabase";
 
 const SignIn = () => {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // Handle sign-in logic here, e.g., API call to authenticate user
+  async function handleSignIn() {
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      Alert.alert("Error", error.message);
+    }
+    setLoading(false);
+  }
 
   // Handle sign-in logic here, e.g., API call to authenticate user
 
@@ -38,10 +54,9 @@ const SignIn = () => {
       />
       <View style={{ marginTop: 30 }}>
         <Button
-          text="Sign In"
-          onPress={() => {
-            // Handle sign-in logic here
-          }}
+          disabled={loading}
+          text={loading ? "Logging in" : "Sign In"}
+          onPress={handleSignIn}
         />
         <Link href="/(auth)/signUp" style={styles.imageText}>
           <Text>Don't have an account? Sign Up</Text>

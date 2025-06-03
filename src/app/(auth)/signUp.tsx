@@ -1,16 +1,27 @@
-import { View, Text, StyleSheet, TextInput } from "react-native";
-import React from "react";
+import { View, Text, StyleSheet, TextInput, Alert } from "react-native";
+import React, { useState } from "react";
 import Colors from "@/src/constants/Colors";
 import Button from "@/src/components/Button";
 import { Link } from "expo-router";
+import { supabase } from "@/src/lib/supabase";
 
 const SignUp = () => {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Handle sign-in logic here, e.g., API call to authenticate user
   async function handleSignUp() {
-    // Example: Call your authentication API here
+    setLoading(true);
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+
+    if (error) {
+      Alert.alert("Error", error.message);
+    }
+    setLoading(false);
   }
 
   return (
@@ -39,20 +50,13 @@ const SignUp = () => {
         value={password}
         onChangeText={setPassword}
       />
-      <Text style={styles.label}>Confirm password</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        autoCapitalize="none"
-        autoComplete="password"
-        textContentType="password"
-        returnKeyType="done"
-        value={password}
-        onChangeText={setPassword}
-      />
+
       <View style={{ marginTop: 30 }}>
-        <Button text="Sign Up" onPress={SignUp} />
+        <Button
+          disabled={loading}
+          text={loading ? "Creating account..." : "Sign Up"}
+          onPress={handleSignUp}
+        />
       </View>
     </View>
   );
