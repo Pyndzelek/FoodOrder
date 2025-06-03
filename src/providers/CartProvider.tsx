@@ -1,11 +1,12 @@
 import { createContext, useContext, useState } from "react";
 import { CartItem, Product } from "../types";
 import { randomUUID } from "expo-crypto";
+import { Tables } from "../database.types";
 
 //rzeczy które zwraca context
 type CartType = {
   items: CartItem[];
-  onAddItem: (product: Product, size: CartItem["size"]) => void;
+  onAddItem: (product: Tables<"products">, size: CartItem["size"]) => void;
   updateQuantity: (id: string, delta: number) => void;
   total: number;
 };
@@ -24,7 +25,7 @@ interface CartProviderProps {
 const CartProvider = ({ children }: CartProviderProps) => {
   const [items, setItems] = useState<CartItem[]>([]);
 
-  const onAddItem = (product: Product, size: CartItem["size"]) => {
+  const onAddItem = (product: Tables<"products">, size: CartItem["size"]) => {
     // Check if the item already exists in the cart
     const existingItem = items.find(
       (item) => item.product === product && item.size === size
