@@ -4,7 +4,6 @@ import Button from "@/src/components/Button";
 import Colors from "@/src/constants/Colors";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import products from "@/assets/data/products";
 import { useCreateProduct } from "@/src/api/products";
 
 const defaultPizzaImage =
@@ -51,11 +50,17 @@ const CreateScreen = () => {
     if (!validateInput()) {
       return;
     }
-    createProduct({
-      name,
-      price: parseFloat(price),
-    });
-    router.push("/(admin)/menu");
+    createProduct(
+      {
+        name,
+        price: parseFloat(price),
+      },
+      {
+        onSuccess: () => {
+          router.back();
+        },
+      }
+    );
   };
 
   const onUpdate = () => {

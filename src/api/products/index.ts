@@ -1,5 +1,5 @@
 import { supabase } from "@/src/lib/supabase";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 //This is a custom hook that fetches a list of products from a Supabase database using React Query.
 
 export const useProductList = () => {
@@ -37,6 +37,8 @@ export const useProduct = (id: number) => {
 
 // This is a custom hook that creates a new product in a Supabase database using React Query - useMutation.
 export const useCreateProduct = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async (data: any) => {
       const { data: newProduct, error } = await supabase
@@ -51,6 +53,14 @@ export const useCreateProduct = () => {
         throw new Error(error.message);
       }
       return newProduct;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["products"],
+      });
+    },
+    onError: (error) => {
+      console.error("Error creating product:", error);
     },
   });
 };

@@ -18,6 +18,8 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useProduct } from "@/src/api/products";
 
 const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
+const defaulPizzaImage =
+  "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png";
 
 const ProductDetails = () => {
   const { id: idString } = useLocalSearchParams();
@@ -56,7 +58,7 @@ const ProductDetails = () => {
 
       <Image
         source={{
-          uri: product.image,
+          uri: product.image || defaulPizzaImage,
         }}
         style={styles.image}
       />
